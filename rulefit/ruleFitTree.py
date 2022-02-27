@@ -1,11 +1,11 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from rulefit import RuleFit
 
 # https://github.com/christophM/rulefit, has information for advantages and disadvantages
 # https://machinelearningmastery.com/different-results-each-time-in-machine-learning/, different results each time
 # About lasso regressions: https://www.statisticshowto.com/lasso-regression/
-from rulefit import RuleFit
 
 # coefficient (a) is the weight of the decision rule in the lasso regression
 # support (s) is the percentage of data points to which the decision rule applies
