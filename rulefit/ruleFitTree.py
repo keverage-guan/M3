@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from sklearn.metrics import mean_squared_error
 from rulefit import RuleFit
 
 # https://github.com/christophM/rulefit, has information for advantages and disadvantages
@@ -30,7 +31,7 @@ RSMEs = []
 bestrf = RuleFit()
 lowestRSME = 999
 # train model 10 times and store the one with the lowest RSME
-for i in range(10):
+for i in range(5):
     rf = RuleFit()
     rf.fit(X, y, feature_names = features) # generate decision rules using training data
 
@@ -44,13 +45,7 @@ for i in range(10):
     training_results = training[['state', predicted_col, 'prediction']].copy()
 
     # calculate RSME
-    n = training[training.columns[0]].count() # number of rows
-    # sum errors
-    error_sum = 0
-    training = training.reset_index(drop=True)  # make sure indexes pair with number of rows
-    for index, row in training.iterrows():
-        error_sum += (row[predicted_col] - row['prediction'])**2/n
-    RSME = np.sqrt(error_sum)
+    RSME = mean_squared_error(training[predicted_col], predictions, squared=False)
     RSMEs.append(RSME)
     if RSME < lowestRSME:
         bestrf = rf
