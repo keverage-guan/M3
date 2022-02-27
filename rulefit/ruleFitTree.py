@@ -12,14 +12,14 @@ from rulefit import RuleFit
 # importance (I) is a function of the coefficient and support
 # I = abs(a) * sqrt(s*(1-s))
 
-# the number of conditions per decision rule limited to a depth of 3
-
 # TRAINING THE MODEL
 
 training = pd.read_csv("states.csv") # load data frame
 
+predicted_col = "cost_per_mbps" # column to be used as label
+
 y = training.cost_per_mbps.values # set y as label values
-X = training.drop("cost_per_mbps", axis = 1)  # set x as feature values
+X = training.drop(predicted_col, axis = 1)  # set x as feature values
 X = X.drop("state", axis = 1)  # remove states column
 features = X.columns # set names of features
 
@@ -34,7 +34,7 @@ predictions = rf.predict(X) # predict values
 training['prediction'] = predictions # add predictions to dataframe
 
 # store results in separate data frame and print
-training_results = training[['state', 'cost_per_mbps', 'prediction']].copy()
+training_results = training[['state', predicted_col, 'prediction']].copy()
 print(training_results.head())
 
 # calculate RSME
@@ -43,7 +43,7 @@ n = training[training.columns[0]].count() # number of rows
 error_sum = 0
 training = training.reset_index()  # make sure indexes pair with number of rows
 for index, row in training.iterrows():
-    error_sum += (row['cost_per_mbps'] - row['prediction'])/n
+    error_sum += (row[predicted_col] - row['prediction'])/n
 RSME = np.sqrt(error_sum)
 print("RSME: ", RSME)
 print()
